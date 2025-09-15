@@ -16,9 +16,11 @@ def highlight_explanation(explanation):
 
 def main():
 
-  mode = sys.argv
+  mode = sys.argv[1] if len(sys.argv) > 1 else "unknown"
   if mode != 'generate' and mode != 'explain':
-    print("ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: " + mode)
+    if mode != "generate" and mode != "explain":
+      print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
+      return
     return
 
   try:
@@ -48,7 +50,7 @@ def main():
       {"role": "user", "content": buffer},
   ], tokenize=False, add_generation_prompt=True)
 
-  response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=1000, temp=0.2)
+  response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=1000)
   
   result = response.strip()
   if mode == 'generate':

@@ -79,27 +79,27 @@ zsh_llm_completion() {
 SCRIPT_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
 
 zsh_llm_suggestions_openai() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-openai.py" "generate"
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-openai.py" "generate"
 }
 
 zsh_llm_suggestions_github_copilot() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "generate"
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "generate"
 }
 
-zsh_llm_suggestions_github_mlx() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "generate"
+zsh_llm_suggestions_mlx() {
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "generate"
 }
 
 zsh_llm_suggestions_openai_explain() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-openai.py" "explain"
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-openai.py" "explain"
 }
 
 zsh_llm_suggestions_github_copilot_explain() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "explain"
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "explain"
 }
 
-zsh_llm_suggestions_github_mlx() {
-  zsh_llm_completion "$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
+zsh_llm_suggestions_mlx_explain() {
+  zsh_llm_completion "uv run $SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
 }
 
 zle -N zsh_llm_suggestions_openai
