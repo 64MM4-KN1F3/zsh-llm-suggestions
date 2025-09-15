@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Distribution / build
+dist/
+build/
+*.egg-info/
+.ipynb_checkpoints/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Demo files (assuming these are temporary or examples not meant for version control)
+demo/git-commits
+demo/git-commits-explain
+demo/git-delete-submodule
+demo/git-delete-submodule-2
+demo/joke
