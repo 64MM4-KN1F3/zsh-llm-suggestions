@@ -37,7 +37,13 @@ def main():
 
   model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_MLX_MODEL', 'mlx-community/Phi-3-mini-4k-instruct-8bit')
   
-  model, tokenizer = load(model_name)
+  original_stderr = sys.stderr
+  sys.stderr = open(os.devnull, 'w')
+  try:
+    model, tokenizer = load(model_name)
+  finally:
+    sys.stderr.close()
+    sys.stderr = original_stderr
 
   buffer = sys.stdin.read()
   
