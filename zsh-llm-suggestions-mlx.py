@@ -50,7 +50,7 @@ def main():
       {"role": "user", "content": buffer},
   ], tokenize=False, add_generation_prompt=True)
 
-  response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=1000)
+  response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=100)
   
   result = response.strip()
   if mode == 'generate':
