@@ -76,8 +76,7 @@ zsh_llm_completion() {
   fi
 }
 
-## SCRIPT_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
-SCRIPT_DIR=/Users/alexweatherley/Development/zsh-llm-suggestions
+SCRIPT_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
 
 zsh_llm_suggestions_openai() {
   zsh_llm_completion "uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py" "generate"
