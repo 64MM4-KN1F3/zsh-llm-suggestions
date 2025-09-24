@@ -101,6 +101,15 @@ zsh_llm_suggestions_github_copilot_explain() {
 zsh_llm_suggestions_mlx_explain() {
   zsh_llm_completion "uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
 }
+zsh_llm_suggestions_ollama() {
+  zsh_llm_completion "uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py" "generate"
+}
+
+zsh_llm_suggestions_ollama_explain() {
+  zsh_llm_completion "uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py" "explain"
+}
+zle -N zsh_llm_suggestions_ollama
+zle -N zsh_llm_suggestions_ollama_explain
 
 zle -N zsh_llm_suggestions_openai
 zle -N zsh_llm_suggestions_openai_explain
