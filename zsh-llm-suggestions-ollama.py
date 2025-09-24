@@ -16,13 +16,17 @@ def highlight_explanation(explanation):
 
 def main():
 
-  mode = sys.argv
+  mode = sys.argv[1] if len(sys.argv) > 1 else "unknown"
   if mode != 'generate' and mode != 'explain':
-    print("ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: " + mode)
+    if mode != "generate" and mode != "explain":
+      print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
+      return
     return
 
   try:
     import ollama
+    from ollama import chat
+    from ollama import ChatResponse
   except ImportError:
     print(f'echo "{MISSING_PREREQUISITES} Install Ollama Python API." && uv pip install ollama')
     return

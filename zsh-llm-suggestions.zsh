@@ -77,7 +77,9 @@ zsh_llm_completion() {
 }
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
-if
+if [[ -z "$SCRIPT_DIR" ]]; then
+  SCRIPT_DIR="./"
+fi
 
 zsh_llm_suggestions_openai() {
   local command
@@ -85,26 +87,6 @@ zsh_llm_suggestions_openai() {
     command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
-  fi
-  zsh_llm_completion "$command" "generate"
-}
-
-zsh_llm_suggestions_github_copilot() {
-  local command
-  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
-  else
-    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
-  fi
-  zsh_llm_completion "$command" "generate"
-}
-
-zsh_llm_suggestions_mlx() {
-  local command
-  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
-  else
-    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
   fi
   zsh_llm_completion "$command" "generate"
 }
@@ -119,6 +101,16 @@ zsh_llm_suggestions_openai_explain() {
   zsh_llm_completion "$command" "explain"
 }
 
+zsh_llm_suggestions_github_copilot() {
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  fi
+  zsh_llm_completion "$command" "generate"
+}
+
 zsh_llm_suggestions_github_copilot_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
@@ -127,6 +119,16 @@ zsh_llm_suggestions_github_copilot_explain() {
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
   fi
   zsh_llm_completion "$command" "explain"
+}
+
+zsh_llm_suggestions_mlx() {
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  fi
+  zsh_llm_completion "$command" "generate"
 }
 
 zsh_llm_suggestions_mlx_explain() {
@@ -138,6 +140,7 @@ zsh_llm_suggestions_mlx_explain() {
   fi
   zsh_llm_completion "$command" "explain"
 }
+
 zsh_llm_suggestions_ollama() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
@@ -157,9 +160,9 @@ zsh_llm_suggestions_ollama_explain() {
   fi
   zsh_llm_completion "$command" "explain"
 }
+
 zle -N zsh_llm_suggestions_ollama
 zle -N zsh_llm_suggestions_ollama_explain
-
 zle -N zsh_llm_suggestions_openai
 zle -N zsh_llm_suggestions_openai_explain
 zle -N zsh_llm_suggestions_github_copilot
