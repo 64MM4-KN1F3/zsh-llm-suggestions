@@ -36,6 +36,11 @@ zsh_llm_completion() {
   local llm="$1"
   local mode="$2"
   local query=${BUFFER}
+  
+  local UV_MLX=""
+  if [[ $ZSH_LLM_SUGGESTIONS_USE_UV == true ]]; then
+    UV_MLX="uv run -q --isolated -w mlx_lm -w pygments "
+  fi
 
   # Empty prompt, nothing to do
   if [[ "$query" == "" ]]; then
@@ -87,7 +92,7 @@ zsh_llm_suggestions_github_copilot() {
 }
 
 zsh_llm_suggestions_mlx() {
-  zsh_llm_completion "uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "generate"
+  zsh_llm_completion "$UV_MLX$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "generate"
 }
 
 zsh_llm_suggestions_openai_explain() {
@@ -99,7 +104,7 @@ zsh_llm_suggestions_github_copilot_explain() {
 }
 
 zsh_llm_suggestions_mlx_explain() {
-  zsh_llm_completion "uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
+  zsh_llm_completion "$UV_MLX$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
 }
 zsh_llm_suggestions_ollama() {
   zsh_llm_completion "uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py" "generate"
