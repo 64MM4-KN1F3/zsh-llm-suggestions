@@ -29,18 +29,13 @@ zsh_llm_suggestions_run_query() {
   local query="$2"
   local result_file="$3"
   local mode="$4"
-  echo -n "$query" | eval $llm $mode > $result_file
+  echo -n "$query" | eval "$llm $mode" > "$result_file"
 }
 
 zsh_llm_completion() {
   local llm="$1"
   local mode="$2"
   local query=${BUFFER}
-  
-  local UV_MLX=""
-  if [[ $ZSH_LLM_SUGGESTIONS_USE_UV == true ]]; then
-    UV_MLX="uv run -q --isolated -w mlx_lm -w pygments "
-  fi
 
   # Empty prompt, nothing to do
   if [[ "$query" == "" ]]; then
@@ -82,36 +77,85 @@ zsh_llm_completion() {
 }
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "$0" )" &> /dev/null && pwd )
+if
 
 zsh_llm_suggestions_openai() {
-  zsh_llm_completion "uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py" "generate"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+  fi
+  zsh_llm_completion "$command" "generate"
 }
 
 zsh_llm_suggestions_github_copilot() {
-  zsh_llm_completion "uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "generate"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  fi
+  zsh_llm_completion "$command" "generate"
 }
 
 zsh_llm_suggestions_mlx() {
-  zsh_llm_completion "$UV_MLX$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "generate"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  fi
+  zsh_llm_completion "$command" "generate"
 }
 
 zsh_llm_suggestions_openai_explain() {
-  zsh_llm_completion "uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py" "explain"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+  fi
+  zsh_llm_completion "$command" "explain"
 }
 
 zsh_llm_suggestions_github_copilot_explain() {
-  zsh_llm_completion "uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py" "explain"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+  fi
+  zsh_llm_completion "$command" "explain"
 }
 
 zsh_llm_suggestions_mlx_explain() {
-  zsh_llm_completion "$UV_MLX$SCRIPT_DIR/zsh-llm-suggestions-mlx.py" "explain"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q --isolated -w mlx_lm -w pygments $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+  fi
+  zsh_llm_completion "$command" "explain"
 }
 zsh_llm_suggestions_ollama() {
-  zsh_llm_completion "uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py" "generate"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+  fi
+  zsh_llm_completion "$command" "generate"
 }
 
 zsh_llm_suggestions_ollama_explain() {
-  zsh_llm_completion "uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py" "explain"
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+  fi
+  zsh_llm_completion "$command" "explain"
 }
 zle -N zsh_llm_suggestions_ollama
 zle -N zsh_llm_suggestions_ollama_explain
