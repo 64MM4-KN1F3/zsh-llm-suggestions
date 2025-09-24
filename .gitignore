@@ -26,6 +26,8 @@ build/
 *.swp
 *~
 .DS_Store
+.roo
+TODO.md
 
 # Demo files (assuming these are temporary or examples not meant for version control)
 demo/git-commits
