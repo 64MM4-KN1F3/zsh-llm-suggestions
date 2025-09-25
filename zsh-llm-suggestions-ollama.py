@@ -16,48 +16,55 @@ def highlight_explanation(explanation):
 
 def main():
 
-  mode = sys.argv[1]
+  mode = sys.argv[1] if len(sys.argv) > 1 else "unknown"
   if mode != 'generate' and mode != 'explain':
-    print("ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: " + mode)
+    if mode != "generate" and mode != "explain":
+      print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
+      return
     return
 
   try:
-    import openai
+    import ollama
+    from ollama import chat
+    from ollama import ChatResponse
   except ImportError:
-    print(f'echo "{MISSING_PREREQUISITES} Install OpenAI Python API." && pip3 install openai')
+    print(f'echo "{MISSING_PREREQUISITES} Install Ollama Python API." && uv pip install ollama')
     return
 
-  model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_OPENAI_MODEL', 'gpt-4-1106-preview')
-
-  api_key = os.environ.get('OPENAI_API_KEY')
-  if api_key is None:
-    print(f'echo "{MISSING_PREREQUISITES} OPENAI_API_KEY is not set." && export OPENAI_API_KEY="<copy from https://platform.openai.com/api-keys>"')
+  try:
+    import pygments
+  except ImportError:
+    print(f'echo "{MISSING_PREREQUISITES} Install pygments." && uv pip install pygments')
     return
 
-  client = openai.Client(
-    api_key=api_key,
-  )
+  model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_OLLAMA_MODEL', 'llama3') # Default to 'llama3'
+
+  client = ollama.Client()
 
   buffer = sys.stdin.read()
   system_message="""You are a zsh shell expert, please write a ZSH command that solves my problem.
 You should only output the completed command, no need to include any other explanation."""
   if mode == 'explain':
     system_message="""You are a zsh shell expert, please briefly explain how the given command works. Be as concise as possible. Use Markdown syntax for formatting."""
-  message=[
+  
+  messages=[
     {
       "role":'system',
       "content": system_message,
     },
     {"role": "user", "content": buffer}
   ]
-  response = client.chat.completions.create(
+  
+  response = client.chat(
     model=model_name,
-    messages = message,
-    temperature=0.2,
-    max_tokens=1000,
-    frequency_penalty=0.0
+    messages=messages,
+    options={
+        'temperature': 0.2,
+        'num_predict': 1000,
+    }
   )
-  result = response.choices[0].message.content.strip()
+  
+  result = response['message']['content'].strip()
   if mode == 'generate':
     result = result.replace('```zsh', '').replace('```', '').strip()
     print(result)
