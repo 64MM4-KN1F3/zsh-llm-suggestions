@@ -27,6 +27,8 @@ def main():
     print(f'echo "{MISSING_PREREQUISITES} Install OpenAI Python API." && pip3 install openai')
     return
 
+  model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_OPENAI_MODEL', 'gpt-4-1106-preview')
+
   api_key = os.environ.get('OPENAI_API_KEY')
   if api_key is None:
     print(f'echo "{MISSING_PREREQUISITES} OPENAI_API_KEY is not set." && export OPENAI_API_KEY="<copy from https://platform.openai.com/api-keys>"')
@@ -49,7 +51,7 @@ You should only output the completed command, no need to include any other expla
     {"role": "user", "content": buffer}
   ]
   response = client.chat.completions.create(
-    model="gpt-4-1106-preview",
+    model=model_name,
     messages = message,
     temperature=0.2,
     max_tokens=1000,

@@ -4,6 +4,8 @@ import sys
 import os
 
 MISSING_PREREQUISITES = "zsh-llm-suggestions missing prerequisites:"
+PROMPT_CACHE_FILE_GENERATE = os.path.join(os.path.expanduser("~"), ".zsh_llm_suggestions_mlx_prompt_cache_generate.safetensors")
+PROMPT_CACHE_FILE_EXPLAIN = os.path.join(os.path.expanduser("~"), ".zsh_llm_suggestions_mlx_prompt_cache_explain.safetensors")
 
 def highlight_explanation(explanation):
   try:
@@ -15,24 +17,36 @@ def highlight_explanation(explanation):
     return explanation
 
 def main():
-
   mode = sys.argv[1] if len(sys.argv) > 1 else "unknown"
   if mode != 'generate' and mode != 'explain':
     if mode != "generate" and mode != "explain":
       print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
       return
     return
+  match mode:
+    case 'generate':
+        prompt_cache_file_path = PROMPT_CACHE_FILE_GENERATE
+    case 'explain':
+        prompt_cache_file_path = PROMPT_CACHE_FILE_EXPLAIN
+
 
   try:
     from mlx_lm import load, generate
+    from mlx_lm.models.cache import load_prompt_cache, make_prompt_cache, save_prompt_cache
   except ImportError:
-    print(f'echo "{MISSING_PREREQUISITES} Install mlx-lm." && uv pip install mlx-lm')
+    print("{MISSING_PREREQUISITES} Install mlx-lm.")
     return
 
   try:
     import pygments
   except ImportError:
-    print(f'echo "{MISSING_PREREQUISITES} Install pygments." && uv pip install pygments')
+    print("{MISSING_PREREQUISITES} Install pygments.")
+    return
+  
+  try:
+    import re
+  except ImportError:
+    print("{MISSING_PREREQUISITES} Install re.")
     return
 
   model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_MLX_MODEL', 'mlx-community/Phi-3-mini-4k-instruct-8bit')
@@ -56,11 +70,51 @@ def main():
       {"role": "user", "content": buffer},
   ], tokenize=False, add_generation_prompt=True)
 
-  response = generate(model, tokenizer, prompt=prompt, verbose=False, max_tokens=100)
+  prompt_cache = None
+  if os.path.exists(prompt_cache_file_path):
+      try:
+          prompt_cache = load_prompt_cache(prompt_cache_file_path)
+      except Exception as e:
+          print(f"Error loading prompt cache: {e}. Deleting old cache and regenerating.")
+          if os.path.exists(prompt_cache_file_path):
+              os.remove(prompt_cache_file_path)
+          prompt_cache = None
   
-  result = response.strip()
+  if prompt_cache is None:
+      print("creating " + mode + " prompt cache")
+      prompt_cache = make_prompt_cache(model)
+
+  try:
+      response = generate(
+          model,
+          tokenizer,
+          prompt=prompt,
+          verbose=False,
+          max_tokens=100,
+          prompt_cache=prompt_cache,
+      )
+  except ValueError as e:
+      print(f"Error during generation with prompt cache: {e}. Deleting old cache and regenerating.")
+      if os.path.exists(prompt_cache_file_path):
+          os.remove(prompt_cache_file_path)
+      prompt_cache = make_prompt_cache(model)
+      response = generate(
+          model,
+          tokenizer,
+          prompt=prompt,
+          verbose=False,
+          max_tokens=100,
+          prompt_cache=prompt_cache,
+      )
+
+  save_prompt_cache(prompt_cache_file_path, prompt_cache)
+  
+  regex_pattern_to_remove=r'<\|\w+\|>'
+
+  result = re.sub(regex_pattern_to_remove, '', response.strip())
   if mode == 'generate':
     result = result.replace('```zsh', '').replace('```', '').strip()
+
     print(result)
   if mode == 'explain':
     print(highlight_explanation(result))

@@ -40,7 +40,7 @@ tell you how to finish the setup.
 
 For `zsh_llm_suggestions_openai` (OpenAI-based suggestions):
 - Set the `OPENAI_API_KEY` environment variable to your API key. You can get it
-  from [https://platform.openai.com/api-keys](platform.openai.com/api-keys). Note
+  from [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys). Note
   that every suggestion costs a small amount of money, you are solely responsible for
   these charges.
   ```
@@ -56,7 +56,7 @@ For `zsh_llm_suggestions_openai` (OpenAI-based suggestions):
   ```
 
 For `zsh_llm_suggestions_github_copilot` (GitHub Copilot suggestions):
-- Install GitHub CLI: Follow [https://github.com/cli/cli#installation](github.com/cli/cli#installation).
+- Install GitHub CLI: Follow [https://github.com/cli/cli#installation](https://github.com/cli/cli#installation).
 - Authenticate with GitHub:
   ```
   /usr/bin/gh auth login --web -h github.com
@@ -95,3 +95,15 @@ There are some risks using `zsh-llm-suggestions`:
 Right now, two LLMs are supported:
 1. GitHub Copilot (via GitHub CLI). Requires a GitHub Copilot subscription.
 2. OpenAI. Requires an OpenAI API key. Currently uses `gpt-4-1106-preview`.
+
+## MLX Backend with Prompt Caching
+
+This fork adds a new backend that uses Apple's MLX framework for running LLMs locally on Apple Silicon. This allows you to get command suggestions without needing to send your prompts to a third-party service.
+
+### Prompt Caching
+
+To improve performance, this fork implements prompt caching for the MLX backend. The first time you make a request, the model's prompt state is cached to a file (`~/.zsh_llm_suggestions_mlx_prompt_cache.safetensors`). Subsequent requests will load this cached state, which significantly speeds up the time it takes to get a suggestion.
+
+### Credit
+
+This project is a fork of the original `zsh-llm-suggestions` created by [stefanheule](https://github.com/stefanheule/zsh-llm-suggestions). All credit for the original idea and implementation goes to them.
