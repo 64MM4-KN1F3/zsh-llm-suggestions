@@ -55,14 +55,18 @@ You should only output the completed command, no need to include any other expla
     {"role": "user", "content": buffer}
   ]
   
-  response = client.chat(
-    model=model_name,
-    messages=messages,
-    options={
-        'temperature': 0.2,
-        'num_predict': 1000,
-    }
-  )
+  try:
+    response = client.chat(
+      model=model_name,
+      messages=messages,
+      options={
+          'temperature': 0.2,
+          'num_predict': 1000,
+      }
+    )
+  except ConnectionError:
+    print("Connection Error: Please check if Ollama is installed and running")
+    return
   
   result = response['message']['content'].strip()
   if mode == 'generate':

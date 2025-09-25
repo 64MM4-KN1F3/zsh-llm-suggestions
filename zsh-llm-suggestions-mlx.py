@@ -4,6 +4,7 @@ import sys
 import os
 
 MISSING_PREREQUISITES = "zsh-llm-suggestions missing prerequisites:"
+
 PROMPT_CACHE_FILE_GENERATE = os.path.join(os.path.expanduser("~"), ".zsh_llm_suggestions_mlx_prompt_cache_generate.safetensors")
 PROMPT_CACHE_FILE_EXPLAIN = os.path.join(os.path.expanduser("~"), ".zsh_llm_suggestions_mlx_prompt_cache_explain.safetensors")
 
@@ -18,6 +19,8 @@ def highlight_explanation(explanation):
 
 def main():
   mode = sys.argv[1] if len(sys.argv) > 1 else "unknown"
+  ## TODO remove filename from sys.argv[0] here and reset where the prompt caches live dynamically
+  # script_dir= sys.argv[0]
   if mode != 'generate' and mode != 'explain':
     if mode != "generate" and mode != "explain":
       print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
