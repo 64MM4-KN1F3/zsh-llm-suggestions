@@ -84,7 +84,7 @@ fi
 zsh_llm_suggestions_openai() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w openai_option $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+    command="uv run -q -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   fi
@@ -94,7 +94,7 @@ zsh_llm_suggestions_openai() {
 zsh_llm_suggestions_openai_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w openai_option $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+    command="uv run -q -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   fi
@@ -124,7 +124,7 @@ zsh_llm_suggestions_github_copilot_explain() {
 zsh_llm_suggestions_mlx() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q --isolated -w mlx_option $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+    command="uv run -q --isolated -w pygments -w mlx_lm $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
   fi
@@ -134,7 +134,7 @@ zsh_llm_suggestions_mlx() {
 zsh_llm_suggestions_mlx_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q --isolated -w mlx_option $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
+    command="uv run -q --isolated -w pygments -w mlx_lm $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-mlx.py"
   fi
@@ -144,7 +144,7 @@ zsh_llm_suggestions_mlx_explain() {
 zsh_llm_suggestions_ollama() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments -w ollama_option $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   fi
@@ -154,7 +154,7 @@ zsh_llm_suggestions_ollama() {
 zsh_llm_suggestions_ollama_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments -w ollama_option $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   fi
