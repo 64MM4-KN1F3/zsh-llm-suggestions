@@ -38,7 +38,18 @@ This fork introduces several key enhancements for modern, efficient workflows:
 
 Follow these steps to get set up.
 
-### Step 1: Install Dependencies
+### Step 1: Clone the Repository
+
+Clone this repository to a location of your choice. A common convention is a hidden directory in your home folder.
+
+Shell
+
+```
+git clone https://github.com/64MM4-KN1F3/zsh-llm-suggestions.git ~/.zsh-plugins/zsh-llm-suggestions
+```
+
+
+### Step 2: Install Dependencies
 
 This project uses `uv` by default for a seamless setup. You can also install packages manually with `pip`.
 
@@ -65,16 +76,6 @@ If you prefer not to use `uv`, you must install the required Python packages ma
     
 - **For GitHub Copilot**: See the official guide for [installing GitHub Copilot in the CLI](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-in-the-cli).
     
-
-### Step 2: Clone the Repository
-
-Clone this repository to a location of your choice. A common convention is a hidden directory in your home folder.
-
-Shell
-
-```
-git clone https://github.com/64MM4-KN1F3/zsh-llm-suggestions.git ~/.zsh-plugins/zsh-llm-suggestions
-```
 
 ### Step 3: Configure Your `.zshrc`
 
@@ -125,7 +126,7 @@ exec zsh
 
 ---
 
-## ⚙️ Configuration Example
+## ⚙️ Zsh Configuration Example
 
 Here is a complete example of what you might add to your `.zshrc` file, configured for local models with MLX and Ollama.
 
