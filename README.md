@@ -24,6 +24,7 @@ This fork introduces several key enhancements for modern, efficient workflows:
 ---
 
 ## 🚀 How It Works
+![Demo of zsh-llm-suggestions](https://github.com/64MM4-KN1F3/zsh-llm-suggestions/blob/master/zsh-suggestions.gif?raw=true)
 
 `zsh-llm-suggestions` eliminates the need to remember complex commands.
 
