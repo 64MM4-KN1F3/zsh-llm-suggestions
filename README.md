@@ -55,7 +55,7 @@ This project uses `uv` by default for a seamless setup. You can also install p
 
 #### Option A: Install UV (Recommended)
 
-[UV](https://docs.astral.sh/uv/getting-started/installation/) is an extremely fast Python package installer and resolver. Follow the official instructions to install it. 
+[UV](https://docs.astral.sh/uv/getting-started/installation/) is an extremely fast Python package installer and resolver. Follow the [official instructions](https://docs.astral.sh/uv/getting-started/installation/) to install it. 
 Once `uv` is installed, confiture the zsh-llm-suggestion envrironment from the installation directory with
 - Create virtual environemt: `uv venv`
 - sync the packages you required (mlx_option, ollama_option and/or openai_option)

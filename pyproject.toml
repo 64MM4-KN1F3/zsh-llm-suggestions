@@ -17,3 +17,9 @@ mlx_option = [
 openai_option = [
     "openai>=1.109.1",
 ]
+[dependency-groups]
+dev = [
+    "detect-secrets>=1.5.0",
+    "pre-commit>=4.3.0",
+    "pre-commit-hooks>=6.0.0",
+]
