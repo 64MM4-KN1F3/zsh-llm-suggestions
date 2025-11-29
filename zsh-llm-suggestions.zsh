@@ -54,7 +54,7 @@ zsh_llm_completion() {
   # Temporary file to store the result of the background process
   local result_file="/tmp/zsh-llm-suggestions-result"
   # Run the actual query in the background (since it's long-running, and so that we can show a spinner)
-  read < <( zsh_llm_suggestions_run_query $llm $query $result_file $mode & echo $! )
+  read < <( zsh_llm_suggestions_run_query "$llm" "$query" "$result_file" "$mode" & echo $! )
   # Get the PID of the background process
   local pid=$REPLY
   # Call the spinner function and pass the PID

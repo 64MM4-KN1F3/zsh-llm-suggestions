@@ -42,6 +42,10 @@ def main():
   client = ollama.Client()
 
   buffer = sys.stdin.read()
+  # with open('/tmp/zsh_llm_py_debug.log', 'a') as f:
+  #   import datetime
+  #   f.write(f"DEBUG: {datetime.datetime.now()} - sys.argv: {sys.argv}\n")
+  #   f.write(f"DEBUG: {datetime.datetime.now()} - stdin: {buffer}\n")
   system_message="""You are a zsh shell expert, please write a ZSH command that solves my problem.
 You should only output the completed command, no need to include any other explanation."""
   if mode == 'explain':

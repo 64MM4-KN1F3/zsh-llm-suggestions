@@ -23,16 +23,8 @@ def main():
       print(f"ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: {mode}")
       return
     return
-  match mode:
-    case 'generate':
-        prompt_cache_file_path = os.path.join(script_dir, '.zsh_llm_suggestions_mlx_prompt_cache_generate.safetensors')
-    case 'explain':
-        prompt_cache_file_path = os.path.join(script_dir, '.zsh_llm_suggestions_mlx_prompt_cache_explain.safetensors')
-
-
   try:
     from mlx_lm import load, generate
-    from mlx_lm.models.cache import load_prompt_cache, make_prompt_cache, save_prompt_cache
   except ImportError:
     print("{MISSING_PREREQUISITES} Install mlx-lm.")
     return
@@ -70,44 +62,13 @@ def main():
       {"role": "user", "content": buffer},
   ], tokenize=False, add_generation_prompt=True)
 
-  prompt_cache = None
-  if os.path.exists(prompt_cache_file_path):
-      try:
-          prompt_cache = load_prompt_cache(prompt_cache_file_path)
-      except Exception as e:
-          print(f"Error loading prompt cache: {e}. Deleting old cache and regenerating.")
-          if os.path.exists(prompt_cache_file_path):
-              os.remove(prompt_cache_file_path)
-          prompt_cache = None
-  
-  if prompt_cache is None:
-      print("creating " + mode + " prompt cache")
-      prompt_cache = make_prompt_cache(model)
-
-  try:
-      response = generate(
-          model,
-          tokenizer,
-          prompt=prompt,
-          verbose=False,
-          max_tokens=100,
-          prompt_cache=prompt_cache,
-      )
-  except ValueError as e:
-      print(f"Error during generation with prompt cache: {e}. Deleting old cache and regenerating.")
-      if os.path.exists(prompt_cache_file_path):
-          os.remove(prompt_cache_file_path)
-      prompt_cache = make_prompt_cache(model)
-      response = generate(
-          model,
-          tokenizer,
-          prompt=prompt,
-          verbose=False,
-          max_tokens=100,
-          prompt_cache=prompt_cache,
-      )
-
-  save_prompt_cache(prompt_cache_file_path, prompt_cache)
+  response = generate(
+      model,
+      tokenizer,
+      prompt=prompt,
+      verbose=False,
+      max_tokens=100,
+  )
   
   regex_pattern_to_remove=r'<\|\w+\|>'
 
