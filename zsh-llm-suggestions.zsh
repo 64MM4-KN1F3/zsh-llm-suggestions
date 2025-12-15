@@ -161,6 +161,26 @@ zsh_llm_suggestions_ollama_explain() {
   zsh_llm_completion "$command" "explain"
 }
 
+zsh_llm_suggestions_lmstudio() {
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+  fi
+  zsh_llm_completion "$command" "generate"
+}
+
+zsh_llm_suggestions_lmstudio_explain() {
+  local command
+  if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
+    command="uv run -q -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+  else
+    command="python3 $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+  fi
+  zsh_llm_completion "$command" "explain"
+}
+
 zle -N zsh_llm_suggestions_ollama
 zle -N zsh_llm_suggestions_ollama_explain
 zle -N zsh_llm_suggestions_openai
@@ -169,3 +189,5 @@ zle -N zsh_llm_suggestions_github_copilot
 zle -N zsh_llm_suggestions_github_copilot_explain
 zle -N zsh_llm_suggestions_mlx
 zle -N zsh_llm_suggestions_mlx_explain
+zle -N zsh_llm_suggestions_lmstudio
+zle -N zsh_llm_suggestions_lmstudio_explain
