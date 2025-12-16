@@ -16,6 +16,7 @@ def highlight_explanation(explanation):
 
 def main():
 
+  model_name = os.environ.get('ZSH_LLM_SUGGESTIONS_MODEL', 'devstral-small-2-24b-instruct-2512')
   mode = sys.argv[1]
   if mode != 'generate' and mode != 'explain':
     print("ERROR: something went wrong in zsh-llm-suggestions, please report a bug. Got unknown mode: " + mode)

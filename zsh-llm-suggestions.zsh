@@ -164,7 +164,7 @@ zsh_llm_suggestions_ollama_explain() {
 zsh_llm_suggestions_lmstudio() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+    command="uv run -q --isolated -w pygments -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
   fi
@@ -174,7 +174,7 @@ zsh_llm_suggestions_lmstudio() {
 zsh_llm_suggestions_lmstudio_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
+    command="uv run -q --isolated -w pygments -w lmstudio $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-lmstudio.py"
   fi
