@@ -2,6 +2,8 @@
 
 import sys
 import os
+import subprocess
+import json
 
 MISSING_PREREQUISITES = "zsh-llm-suggestions missing prerequisites:"
 
@@ -13,6 +15,26 @@ def highlight_explanation(explanation):
     return pygments.highlight(explanation, MarkdownLexer(), TerminalFormatter(style='material'))
   except ImportError:
     return explanation
+
+def ensure_lms_server_running():
+    try:
+        # Check server status
+        # User requested: lms server status --json | jq .running
+        result = subprocess.run(['lms', 'server', 'status', '--json'], capture_output=True, text=True)
+        if result.returncode == 0:
+            try:
+                status = json.loads(result.stdout)
+                if not status.get('running', False):
+                    print("LM Studio server is not running. Starting it...", file=sys.stderr)
+                    subprocess.run(['lms', 'server', 'start'], check=True)
+            except json.JSONDecodeError:
+                pass
+    except FileNotFoundError:
+        # lms command likely not found, proceed and let the SDK handle connection errors
+        pass
+    except Exception as e:
+        # Print warning to stderr so it doesn't interfere with command substitution output
+        print(f"Warning: Failed to check/start LM Studio server: {e}", file=sys.stderr)
 
 def main():
 
@@ -28,12 +50,19 @@ def main():
     print(f'echo "{MISSING_PREREQUISITES} Install LM Studio Python SDK." && pip3 install lmstudio')
     return
 
+    return
+
   try:
-      # Connect to the model currently loaded in LM Studio
-      model = lm.llm()
-  except Exception as e:
-      print(f"ERROR: Could not connect to LM Studio. Ensure LM Studio is running and a model is loaded. Details: {e}")
-      return
+      # Try to connect to the model first (Optimistic check)
+      model = lm.llm(model_name)
+  except Exception:
+      # If connection fails, ensure server is running and try again
+      ensure_lms_server_running()
+      try:
+          model = lm.llm(model_name)
+      except Exception as e:
+          print(f"ERROR: Could not connect to LM Studio. Ensure LM Studio is running and a model is loaded. Details: {e}")
+          return
 
   buffer = sys.stdin.read()
   
@@ -54,7 +83,7 @@ def main():
   
   try:
       # Using .respond() as found in search results
-      result = model.respond(full_prompt)
+      result = model.respond(full_prompt).content
   except Exception as e:
       print(f"ERROR: Failed to get response from LM Studio. Details: {e}")
       return
