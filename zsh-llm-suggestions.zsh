@@ -4,6 +4,12 @@ zsh_llm_suggestions_spinner() {
     local delay=0.1
     local spinstr='|/-\'
 
+    local start_time
+    if [[ "$ZSH_LLM_SUGGESTIONS_DISPLAY_TIME" == "true" ]]; then
+        zmodload zsh/datetime 2>/dev/null
+        start_time=$EPOCHREALTIME
+    fi
+
     cleanup() {
       kill $pid
       echo -ne "\e[?25h"
@@ -22,6 +28,18 @@ zsh_llm_suggestions_spinner() {
 
     echo -ne "\e[?25h"
     trap - SIGINT
+
+    if [[ "$ZSH_LLM_SUGGESTIONS_DISPLAY_TIME" == "true" ]] && [[ -n "$start_time" ]]; then
+        local end_time=$EPOCHREALTIME
+        if [[ -n "$end_time" ]]; then
+            local elapsed=$(( end_time - start_time ))
+            if [[ -n "$WIDGET" ]]; then
+                zle -M "$(printf "LLM processing time: %.2fs" "$elapsed")"
+            else
+                printf "\nLLM processing time: %.2fs\n" "$elapsed"
+            fi
+        fi
+    fi
 }
 
 zsh_llm_suggestions_run_query() {
