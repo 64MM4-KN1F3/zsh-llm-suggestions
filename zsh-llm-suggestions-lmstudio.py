@@ -83,7 +83,12 @@ def main():
   
   try:
       # Using .respond() as found in search results
-      result = model.respond(full_prompt).content
+      result = model.respond(full_prompt, config={
+        "temperature": 0.7,
+        "maxTokens": 80,
+        "topPSampling": 0.8,
+        "topKSampling": 20,
+      }).content
   except Exception as e:
       print(f"ERROR: Failed to get response from LM Studio. Details: {e}")
       return
