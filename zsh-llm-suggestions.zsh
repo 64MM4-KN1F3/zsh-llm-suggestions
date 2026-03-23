@@ -4,6 +4,12 @@ zsh_llm_suggestions_spinner() {
     local delay=0.1
     local spinstr='|/-\'
 
+    local start_time
+    if [[ "$ZSH_LLM_SUGGESTIONS_DISPLAY_TIME" == "true" ]]; then
+        zmodload zsh/datetime 2>/dev/null
+        start_time=$EPOCHREALTIME
+    fi
+
     cleanup() {
       kill $pid
       echo -ne "\e[?25h"
@@ -22,6 +28,18 @@ zsh_llm_suggestions_spinner() {
 
     echo -ne "\e[?25h"
     trap - SIGINT
+
+    if [[ "$ZSH_LLM_SUGGESTIONS_DISPLAY_TIME" == "true" ]] && [[ -n "$start_time" ]]; then
+        local end_time=$EPOCHREALTIME
+        if [[ -n "$end_time" ]]; then
+            local elapsed=$(( end_time - start_time ))
+            if [[ -n "$WIDGET" ]]; then
+                zle -M "$(printf "LLM processing time: %.2fs" "$elapsed")"
+            else
+                printf "\nLLM processing time: %.2fs\n" "$elapsed"
+            fi
+        fi
+    fi
 }
 
 zsh_llm_suggestions_run_query() {
@@ -84,7 +102,7 @@ fi
 zsh_llm_suggestions_openai() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+    command="uv run -q --isolated -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   fi
@@ -94,7 +112,7 @@ zsh_llm_suggestions_openai() {
 zsh_llm_suggestions_openai_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
+    command="uv run -q --isolated -w openai $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-openai.py"
   fi
@@ -104,7 +122,7 @@ zsh_llm_suggestions_openai_explain() {
 zsh_llm_suggestions_github_copilot() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+    command="uv run -q --isolated -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
   fi
@@ -114,7 +132,7 @@ zsh_llm_suggestions_github_copilot() {
 zsh_llm_suggestions_github_copilot_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
+    command="uv run -q --isolated -w pygments $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-github-copilot.py"
   fi
@@ -144,7 +162,7 @@ zsh_llm_suggestions_mlx_explain() {
 zsh_llm_suggestions_ollama() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+    command="uv run -q --isolated -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   fi
@@ -154,7 +172,7 @@ zsh_llm_suggestions_ollama() {
 zsh_llm_suggestions_ollama_explain() {
   local command
   if [[ "$ZSH_LLM_SUGGESTIONS_USE_UV" == "true" ]]; then
-    command="uv run -q -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
+    command="uv run -q --isolated -w pygments -w ollama $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   else
     command="python3 $SCRIPT_DIR/zsh-llm-suggestions-ollama.py"
   fi
