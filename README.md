@@ -97,6 +97,7 @@ Add the following configuration to your `~/.zshrc` file.
 |---|---|---|---|
 |`ZSH_LLM_SUGGESTIONS_USE_UV`|Set to `true` to use `uv`.|`false`|`export ZSH_LLM_SUGGESTIONS_USE_UV=true`|
 |`OPENAI_API_KEY`|Your OpenAI API key.||`export OPENAI_API_KEY="sk-..."`|
+|`OPENAI_BASE_URL`|For OpenAI-Compatible endpoints`||`export OPENAI_BASE_URL="http://localhost:8080/v1"`|
 |`ZSH_LLM_SUGGESTIONS_MLX_MODEL`|The MLX model to use from Hugging Face.||`export ZSH_LLM_SUGGESTIONS_MLX_MODEL="mlx-community/Phi-3-mini-4k-instruct-8bit"`|
 |`ZSH_LLM_SUGGESTIONS_OLLAMA_MODEL`|The Ollama model to use.||`export ZSH_LLM_SUGGESTIONS_OLLAMA_MODEL="llama3"`|
 |`ZSH_LLM_SUGGESTIONS_OPENAI_MODEL`|The OpenAI model to use.||`export ZSH_LLM_SUGGESTIONS_OPENAI_MODEL="gpt-4o-mini"`|
